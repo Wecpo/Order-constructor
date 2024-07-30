@@ -3,7 +3,7 @@ function init() {
 }
 
 function createChoiceProductForm() {
-  const cart = [];
+  let cart = [];
 
   const body = document.querySelector("body");
 
@@ -28,9 +28,7 @@ function createChoiceProductForm() {
 
   // Создание списка продуктов
   const listOfProducts = document.createElement("ol");
-  listOfProducts.textContent = cart.length
-    ? "Ваша корзина"
-    : "Ваша корзина пуста";
+  listOfProducts.textContent = "Ваша корзина: ";
 
   // Создание продуктов в выпадающем списке
   const option1 = document.createElement("option");
@@ -53,7 +51,18 @@ function createChoiceProductForm() {
   option5.value = `Колбаса - 400р`;
   option5.textContent = "Колбаса - 400р";
 
-  selectFormChoiceProduct.append(option1, option2, option3, option4, option5);
+  const option6 = document.createElement("option");
+  option6.value = `Яйца - 140р`;
+  option6.textContent = "Яйца - 140р";
+
+  selectFormChoiceProduct.append(
+    option1,
+    option2,
+    option3,
+    option4,
+    option5,
+    option6
+  );
 
   body.append(
     formChoiceProduct,
@@ -62,6 +71,28 @@ function createChoiceProductForm() {
     addToCartButton,
     listOfProducts
   );
+
+  function renderCart() {
+    const productsLi = document.querySelectorAll("li");
+
+    for (let i = 0; i < productsLi.length; i++) {
+      productsLi[i].remove();
+    }
+
+    for (let product of cart) {
+      const removeButton = document.createElement("button");
+      removeButton.style.marginLeft = "15px";
+      removeButton.textContent = "x";
+      removeButton.addEventListener("click", removeItemFromCart);
+
+      const li = document.createElement("li");
+      li.textContent = `${product.name} - ${product.price} ${product.count} шт.`;
+      li.id = product.name;
+      li.append(removeButton);
+
+      listOfProducts.append(li);
+    }
+  }
 
   function addToCart(event) {
     event.preventDefault();
@@ -78,7 +109,9 @@ function createChoiceProductForm() {
         ...cart[indexOfProductInCart],
         count: cart[indexOfProductInCart].count + 1,
       };
+
       cart[indexOfProductInCart] = updatedProduct;
+
       renderCart();
     } else {
       cart.push({
@@ -86,21 +119,39 @@ function createChoiceProductForm() {
         price: productPrice,
         count: 1,
       });
+
       renderCart();
     }
   }
 
-  function renderCart() {
-    const productLi = document.querySelectorAll("li");
-    for (let i = 0; i < productLi.length; i++) {
-      productLi[i].remove();
+  function removeItemFromCart(event) {
+    const productName = event.target.parentElement.id;
+
+    const product = cart.find((item) => item.name === productName);
+    if (product.count === 1) {
+      const newCart = cart.filter((product) => {
+        if (product.name !== productName) {
+          return product;
+        }
+      });
+
+      cart = newCart;
+    } else {
+      const indexOfProductInCart = cart.findIndex(
+        (item) => item.name === productName
+      );
+
+      const updatedProduct = {
+        ...cart[indexOfProductInCart],
+        count: cart[indexOfProductInCart].count - 1,
+      };
+
+      cart[indexOfProductInCart] = updatedProduct;
+
+      renderCart();
     }
-    for (let item of cart) {
-      const li = document.createElement("li");
-      li.textContent = `${item.name} - ${item.price} ${item.count} шт.`;
-      li.remove;
-      listOfProducts.append(li);
-    }
+
+    renderCart();
   }
 }
 
