@@ -96,12 +96,11 @@ function createChoiceProductForm() {
     }
 
     // Отображение общей стоимости
-
     cart.length > 0
       ? (totalCartPrice.textContent = `Общая стоимость: ${cart.reduce(
           (acc, item) => {
             const itemPrice = +item.price * item.count;
-
+            console.log(item);
             return (acc += itemPrice);
           },
           0
@@ -137,7 +136,6 @@ function createChoiceProductForm() {
         price: productPrice,
         count: 1,
       });
-
       renderCart();
     }
   }
