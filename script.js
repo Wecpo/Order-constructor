@@ -71,6 +71,14 @@ function createChoiceProductForm() {
     totalCartPrice
   );
 
+  function getTotalPrice() {
+    return cart.reduce((acc, item) => {
+      const itemPrice = +item.price * item.count;
+
+      return (acc += itemPrice);
+    }, 0);
+  }
+
   function renderCart() {
     // Функция обновления корзины
     const productsLi = document.querySelectorAll("li");
@@ -96,17 +104,11 @@ function createChoiceProductForm() {
     }
 
     // Отображение общей стоимости
-
-    cart.length > 0
-      ? (totalCartPrice.textContent = `Общая стоимость: ${cart.reduce(
-          (acc, item) => {
-            const itemPrice = +item.price * item.count;
-
-            return (acc += itemPrice);
-          },
-          0
-        )}р`)
-      : (totalCartPrice.textContent = "");
+    if (cart.length) {
+      totalCartPrice.textContent = `Общая стоимость: ${getTotalPrice()}р`;
+    } else {
+      totalCartPrice.textContent = "";
+    }
   }
 
   function addProductToCart(event) {
@@ -129,17 +131,14 @@ function createChoiceProductForm() {
       };
 
       cart[indexOfProductInCart] = updatedProduct;
-
-      renderCart();
     } else {
       cart.push({
         name: productName,
         price: productPrice,
         count: 1,
       });
-
-      renderCart();
     }
+    renderCart();
   }
 
   function removeProductFromCart(event) {
