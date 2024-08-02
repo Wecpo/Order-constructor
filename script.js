@@ -117,22 +117,17 @@ function createChoiceProductForm() {
 
   function addProductToCart(event) {
     // Функция добавления продукта в корзину
-
     event.preventDefault();
 
     listOfProducts.textContent = `Ваша корзина:`;
-    const productName = selectFormChoiceProduct.value.split("-")[0];
-    const productPrice = selectFormChoiceProduct.value.split("-")[1];
+
+    const [productName, productPrice] =
+      selectFormChoiceProduct.value.split("-");
 
     const productIndex = getProductIndex(productName);
 
     if (productIndex >= 0) {
-      const updatedProduct = {
-        ...cart[productIndex],
-        count: cart[productIndex].count + 1,
-      };
-
-      cart[productIndex] = updatedProduct;
+      cart[productIndex].count++;
     } else {
       cart.push({
         name: productName,
@@ -140,6 +135,7 @@ function createChoiceProductForm() {
         count: 1,
       });
     }
+
     renderCart();
   }
 
