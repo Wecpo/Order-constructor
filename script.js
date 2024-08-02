@@ -142,34 +142,20 @@ function createChoiceProductForm() {
   }
 
   function removeProductFromCart(event) {
-    // Функция удаления / декремента продукта в корзине
-
     const productName = event.target.parentElement.id;
 
-    const product = cart.find((item) => item.name === productName);
-    if (product.count === 1) {
-      const newCart = cart.filter((product) => {
-        if (product.name !== productName) {
-          return product;
-        }
-      });
+    const product = cart.find((product) => product.name === productName);
 
-      cart = newCart;
+    if (product.count === 1) {
+      cart = cart.filter((product) => product.name !== productName);
 
       if (!cart.length) {
         listOfProducts.textContent = "Ваша корзина пуста";
       }
     } else {
-      const indexOfProductInCart = cart.findIndex(
-        (item) => item.name === productName
-      );
+      const productIndex = cart.findIndex((item) => item.name === productName);
 
-      const updatedProduct = {
-        ...cart[indexOfProductInCart],
-        count: cart[indexOfProductInCart].count - 1,
-      };
-
-      cart[indexOfProductInCart] = updatedProduct;
+      cart[productIndex].count--;
     }
 
     renderCart();
