@@ -1,10 +1,28 @@
 const selectOptions = [
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
-  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  {
+    value: "Гречка - 100",
+    textContent: "Гречка - 100р",
+  },
+  {
+    value: "Яблоки - 110",
+    textContent: "Яблоки - 110р",
+  },
+  {
+    value: "Сливочное масло - 200",
+    textContent: "Сливочное масло - 200р",
+  },
+  {
+    value: "Квас - 130",
+    textContent: "Квас - 100р",
+  },
+  {
+    value: "Колбаса - 400",
+    textContent: "Колбаса - 400р",
+  },
+  {
+    value: "Яйца - 140",
+    textContent: "Яйца - 140р",
+  },
 ];
 
 function createChoiceProductForm() {
@@ -44,39 +62,16 @@ function createChoiceProductForm() {
   const totalCartPrice = document.createElement("div");
   totalCartPrice.textContent = "";
 
-  // Создание продуктов в выпадающем списке
-  const option1 = document.createElement("option");
-  option1.value = "Гречка - 100";
-  option1.textContent = "Гречка - 100р";
+  function getSelectOptionsArray() {
+    return selectOptions.map((item) => {
+      const option = document.createElement("option");
+      option.value = item.value;
+      option.textContent = item.textContent;
+      return option;
+    });
+  }
 
-  const option2 = document.createElement("option");
-  option2.value = "Яблоки - 110";
-  option2.textContent = "Яблоки - 110р";
-
-  const option3 = document.createElement("option");
-  option3.value = "Сливочное масло - 200";
-  option3.textContent = "Сливочное масло - 200р";
-
-  const option4 = document.createElement("option");
-  option4.value = `Квас - 130`;
-  option4.textContent = "Квас - 130р";
-
-  const option5 = document.createElement("option");
-  option5.value = `Колбаса - 400`;
-  option5.textContent = "Колбаса - 400р";
-
-  const option6 = document.createElement("option");
-  option6.value = `Яйца - 140`;
-  option6.textContent = "Яйца - 140р";
-
-  selectFormChoiceProduct.append(
-    option1,
-    option2,
-    option3,
-    option4,
-    option5,
-    option6
-  );
+  selectFormChoiceProduct.append(...getSelectOptionsArray());
 
   body.append(
     formChoiceProduct,
