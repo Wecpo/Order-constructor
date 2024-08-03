@@ -1,3 +1,12 @@
+const selectOptions = [
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+  { value: "Гречка - 100", textContent: "Гречка - 100р" },
+];
+
 function createChoiceProductForm() {
   let cart = [];
 
@@ -8,6 +17,13 @@ function createChoiceProductForm() {
   addProductToCartButton.style.marginLeft = "10px";
   addProductToCartButton.textContent = "Добавить в корзину";
   addProductToCartButton.addEventListener("click", addProductToCart);
+  addProductToCartButton.addEventListener(
+    "unload",
+    () => addProductToCartButton.removeEventListener("click", addProductToCart),
+    {
+      once: true,
+    }
+  );
 
   // Создание формы выбора продукта
   const formChoiceProduct = document.createElement("form");
@@ -85,6 +101,11 @@ function createChoiceProductForm() {
 
     // Удаляем все элементы списка перед рендером
     for (let i = 0; i < productsLi.length; i++) {
+      productsLi[i].firstElementChild.removeEventListener(
+        "click",
+        removeProductFromCart
+      );
+
       productsLi[i].remove();
     }
 
@@ -93,6 +114,7 @@ function createChoiceProductForm() {
       const removeProductButton = document.createElement("button");
       removeProductButton.style.marginLeft = "15px";
       removeProductButton.textContent = "x";
+
       removeProductButton.addEventListener("click", removeProductFromCart);
 
       const li = document.createElement("li");
