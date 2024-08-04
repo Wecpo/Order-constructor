@@ -27,22 +27,31 @@ const selectOptions = [
   },
 ];
 
+function debouce(func, delay) {
+  let timeoutId = 0;
+  return function () {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => func(), delay);
+  };
+}
+
 export default function initForm() {
   const body = document.querySelector("body");
 
   // Создание кнопки добавления продукта в корзину
   const addProductToCartButton = document.createElement("button");
-  addProductToCartButton.style.marginLeft = "10px";
   addProductToCartButton.textContent = "Добавить в корзину";
-  addProductToCartButton.addEventListener("click", (event) =>
-    Order.prototype.addProductToCart(event)
+  addProductToCartButton.addEventListener(
+    "click",
+    debouce(() => Order.prototype.addProductToCart(), 150)
   );
   addProductToCartButton.addEventListener(
     "unload",
     () =>
       addProductToCartButton.removeEventListener(
         "click",
-        Order.prototype.addProductToCart
+        debouce(() => Order.prototype.addProductToCart(), 150)
       ),
     {
       once: true,

@@ -6,9 +6,8 @@ export default function Order() {
 
 Order.prototype.cart = [];
 
-Order.prototype.addProductToCart = function (event) {
+Order.prototype.addProductToCart = function () {
   // Функция добавления продукта в корзину
-  event.preventDefault();
 
   const listOfProducts = document.querySelector("#listOfProducts");
   listOfProducts.textContent = `Ваша корзина:`;
@@ -56,7 +55,10 @@ Order.prototype.removeProductFromCart = function (event) {
   this.cart = this.cart.filter((product) => product.name !== productName);
 
   const listOfProducts = document.querySelector("#listOfProducts");
-  listOfProducts.textContent = "Ваша корзина пуста";
+  if (!this.cart.length) {
+    listOfProducts.textContent = "Ваша корзина пуста";
+  }
+
   this.renderCart();
 };
 
@@ -81,14 +83,12 @@ Order.prototype.renderCart = function () {
   // Рендерим список продуктов
   for (let product of this.cart) {
     const decrementProductButton = document.createElement("button");
-    decrementProductButton.style.marginLeft = "15px";
     decrementProductButton.textContent = "-";
     decrementProductButton.addEventListener("click", (event) =>
       this.decrementProductInCart(event)
     );
 
     const removeProductButton = document.createElement("button");
-    removeProductButton.style.marginLeft = "15px";
     removeProductButton.textContent = "x";
     removeProductButton.addEventListener("click", (event) =>
       this.removeProductFromCart(event)
