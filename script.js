@@ -35,9 +35,10 @@ Order.prototype.addProductToCart = function () {
 };
 
 Order.prototype.decrementProductInCart = function (event) {
-  const productName = event.target.parentElement.id;
+  const productName = event.target.id;
 
   const product = this.cart.find((product) => product.name === productName);
+  console.log(productName);
 
   if (product.count === 1) {
     this.removeProductFromCart(event);
@@ -51,7 +52,8 @@ Order.prototype.decrementProductInCart = function (event) {
 };
 
 Order.prototype.removeProductFromCart = function (event) {
-  const productName = event.target.parentElement.id;
+  const productName = event.target.id;
+
   this.cart = this.cart.filter((product) => product.name !== productName);
 
   const listOfProducts = document.querySelector("#listOfProducts");
@@ -80,24 +82,44 @@ Order.prototype.renderCart = function () {
     productsLi[i].remove();
   }
 
+  function createElement(tag, textContent = "", id = "", className = "") {
+    const element = document.createElement(`${tag}`);
+    element.className = className;
+    element.id = id;
+    element.textContent = textContent;
+    return element;
+  }
+
   // Рендерим список продуктов
   for (let product of this.cart) {
-    const decrementProductButton = document.createElement("button");
-    decrementProductButton.textContent = "-";
+    const productActionContainer = createElement("div");
+
+    const decrementProductButton = createElement(
+      "button",
+      "-",
+      product.name,
+      "decrementProductButton"
+    );
     decrementProductButton.addEventListener("click", (event) =>
       this.decrementProductInCart(event)
     );
 
-    const removeProductButton = document.createElement("button");
-    removeProductButton.textContent = "x";
+    const removeProductButton = createElement(
+      "button",
+      "x",
+      product.name,
+      "removeProductButton"
+    );
     removeProductButton.addEventListener("click", (event) =>
       this.removeProductFromCart(event)
     );
 
+    productActionContainer.append(decrementProductButton, removeProductButton);
+
     const li = document.createElement("li");
     li.textContent = `${product.name} - ${product.price}р ${product.count} шт.`;
     li.id = product.name;
-    li.append(decrementProductButton, removeProductButton);
+    li.append(productActionContainer);
 
     const listOfProducts = document.querySelector("#listOfProducts");
     listOfProducts.append(li);
