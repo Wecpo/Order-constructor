@@ -1,4 +1,4 @@
-import initForm from "./initForm.js";
+import initForm, { createElement } from "./initForm.js";
 
 export default function Order() {
   initForm();
@@ -38,7 +38,6 @@ Order.prototype.decrementProductInCart = function (event) {
   const productName = event.target.id;
 
   const product = this.cart.find((product) => product.name === productName);
-  console.log(productName);
 
   if (product.count === 1) {
     this.removeProductFromCart(event);
@@ -82,14 +81,6 @@ Order.prototype.renderCart = function () {
     productsLi[i].remove();
   }
 
-  function createElement(tag, textContent = "", id = "", className = "") {
-    const element = document.createElement(`${tag}`);
-    element.className = className;
-    element.id = id;
-    element.textContent = textContent;
-    return element;
-  }
-
   // Рендерим список продуктов
   for (let product of this.cart) {
     const productActionContainer = createElement("div");
@@ -116,9 +107,11 @@ Order.prototype.renderCart = function () {
 
     productActionContainer.append(decrementProductButton, removeProductButton);
 
-    const li = document.createElement("li");
-    li.textContent = `${product.name} - ${product.price}р ${product.count} шт.`;
-    li.id = product.name;
+    const li = createElement(
+      "li",
+      `${product.name} - ${product.price}р ${product.count} шт.`,
+      product.name
+    );
     li.append(productActionContainer);
 
     const listOfProducts = document.querySelector("#listOfProducts");

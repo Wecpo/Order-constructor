@@ -36,22 +36,29 @@ function debouce(func, delay) {
   };
 }
 
+export function createElement(tag, textContent, id, className) {
+  const element = document.createElement(`${tag}`);
+  element.className = className;
+  element.id = id;
+  element.textContent = textContent;
+  return element;
+}
+
 export default function initForm() {
   const body = document.querySelector("body");
 
   // Создание кнопки добавления продукта в корзину
-  const addProductToCartButton = document.createElement("button");
-  addProductToCartButton.textContent = "Добавить в корзину";
+  const addProductToCartButton = createElement("button", "Добавить в корзину");
   addProductToCartButton.addEventListener(
     "click",
-    debouce(() => Order.prototype.addProductToCart(), 150)
+    debouce(() => Order.prototype.addProductToCart(), 400)
   );
   addProductToCartButton.addEventListener(
     "unload",
     () =>
       addProductToCartButton.removeEventListener(
         "click",
-        debouce(() => Order.prototype.addProductToCart(), 150)
+        debouce(Order.prototype.addProductToCart)
       ),
     {
       once: true,
@@ -59,26 +66,26 @@ export default function initForm() {
   );
 
   // Создание формы выбора продукта
-  const formChoiceProduct = document.createElement("form");
-  formChoiceProduct.name = "formChoiceProduct";
+  const formChoiceProduct = createElement("form");
 
   // Создание label для формы выбора продукта
-  const labelForFormChoiceProduct = document.createElement("label");
-  labelForFormChoiceProduct.textContent = "Выберите продукт";
+  const labelForFormChoiceProduct = createElement("label", "Выберите продукт");
 
   // Создание выпадающего списка для формы выбора продукта
-  const selectFormChoiceProduct = document.createElement("select");
-  selectFormChoiceProduct.id = "selectFormChoiceProduct";
-  selectFormChoiceProduct.name = "product";
+  const selectFormChoiceProduct = createElement(
+    "select",
+    "",
+    "selectFormChoiceProduct"
+  );
 
   // Создание списка продуктов
-  const listOfProducts = document.createElement("ol");
-  listOfProducts.id = "listOfProducts";
-  listOfProducts.textContent = `Ваша корзина пуста`;
+  const listOfProducts = createElement(
+    "ol",
+    "Ваша корзина пуста",
+    "listOfProducts"
+  );
 
-  const totalCartPrice = document.createElement("div");
-  totalCartPrice.id = "totalCartPrice";
-  totalCartPrice.textContent = "";
+  const totalCartPrice = createElement("div", "", "totalCartPrice");
 
   selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
 
