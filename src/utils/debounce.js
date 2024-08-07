@@ -3,6 +3,6 @@ export function debouce(func, delay) {
   return function () {
     clearTimeout(timeoutId);
 
-    timeoutId = setTimeout(() => func(), delay);
+    timeoutId = setTimeout(func, delay);
   };
 }
