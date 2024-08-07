@@ -1,4 +1,6 @@
-import Order from "./script.js";
+import Order from "../main.js";
+import { createElement } from "./utils/customCreateElement.js";
+import { debouce } from "./utils/debounce.js";
 
 const selectOptions = [
   {
@@ -27,24 +29,16 @@ const selectOptions = [
   },
 ];
 
-function debouce(func, delay) {
-  let timeoutId = 0;
-  return function () {
-    clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(() => func(), delay);
-  };
+function getSelectOptionsArray(selectOptions) {
+  return selectOptions.map((item) => {
+    const option = document.createElement("option");
+    option.value = item.value;
+    option.textContent = item.textContent;
+    return option;
+  });
 }
 
-export function createElement(tag, textContent, id, className) {
-  const element = document.createElement(`${tag}`);
-  element.className = className;
-  element.id = id;
-  element.textContent = textContent;
-  return element;
-}
-
-export default function initForm() {
+export function initForm() {
   const body = document.querySelector("body");
 
   // Создание кнопки добавления продукта в корзину
@@ -97,13 +91,4 @@ export default function initForm() {
     listOfProducts,
     totalCartPrice
   );
-}
-
-function getSelectOptionsArray(selectOptions) {
-  return selectOptions.map((item) => {
-    const option = document.createElement("option");
-    option.value = item.value;
-    option.textContent = item.textContent;
-    return option;
-  });
 }

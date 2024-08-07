@@ -1,4 +1,5 @@
-import initForm, { createElement } from "./initForm.js";
+import { initForm } from "./src/initForm.js";
+import { createElement } from "./src/utils/customCreateElement.js";
 
 export default function Order() {
   initForm();
