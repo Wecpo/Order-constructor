@@ -31,9 +31,11 @@ const selectOptions = [
 
 function getSelectOptionsArray(selectOptions) {
   return selectOptions.map((item) => {
-    const option = document.createElement("option");
+    const option = createElement({
+      tag: "option",
+      textContent: `${item.textContent}`,
+    });
     option.value = item.value;
-    option.textContent = item.textContent;
     return option;
   });
 }
@@ -42,7 +44,10 @@ export function initForm() {
   const body = document.querySelector("body");
 
   // Создание кнопки добавления продукта в корзину
-  const addProductToCartButton = createElement("button", "Добавить в корзину");
+  const addProductToCartButton = createElement({
+    tag: "button",
+    textContent: "Добавить в корзину",
+  });
   addProductToCartButton.addEventListener(
     "click",
     debouce(() => Order.prototype.addProductToCart(), 400)
@@ -60,26 +65,33 @@ export function initForm() {
   );
 
   // Создание формы выбора продукта
-  const formChoiceProduct = createElement("form");
+  const formChoiceProduct = createElement({ tag: "form" });
 
   // Создание label для формы выбора продукта
-  const labelForFormChoiceProduct = createElement("label", "Выберите продукт");
+  const labelForFormChoiceProduct = createElement({
+    tag: "label",
+    textContent: "Выберите продукт",
+  });
 
   // Создание выпадающего списка для формы выбора продукта
-  const selectFormChoiceProduct = createElement(
-    "select",
-    "",
-    "selectFormChoiceProduct"
-  );
+  const selectFormChoiceProduct = createElement({
+    tag: "select",
+    textContent: "",
+    id: "selectFormChoiceProduct",
+  });
 
   // Создание списка продуктов
-  const listOfProducts = createElement(
-    "ol",
-    "Ваша корзина пуста",
-    "listOfProducts"
-  );
+  const listOfProducts = createElement({
+    tag: "ol",
+    textContent: "Ваша корзина пуста",
+    id: "listOfProducts",
+  });
 
-  const totalCartPrice = createElement("div", "", "totalCartPrice");
+  const totalCartPrice = createElement({
+    tag: "div",
+    textContent: "",
+    id: "totalCartPrice",
+  });
 
   selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
 

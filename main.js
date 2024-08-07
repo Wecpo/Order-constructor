@@ -84,35 +84,35 @@ Order.prototype.renderCart = function () {
 
   // Рендерим список продуктов
   for (let product of this.cart) {
-    const productActionContainer = createElement("div");
+    const productActionContainer = createElement({ tag: "div" });
 
-    const decrementProductButton = createElement(
-      "button",
-      "-",
-      product.name,
-      "decrementProductButton"
-    );
+    const decrementProductButton = createElement({
+      tag: "button",
+      textContent: "-",
+      id: product.name,
+      className: "decrementProductButton",
+    });
     decrementProductButton.addEventListener("click", (event) =>
       this.decrementProductInCart(event)
     );
 
-    const removeProductButton = createElement(
-      "button",
-      "x",
-      product.name,
-      "removeProductButton"
-    );
+    const removeProductButton = createElement({
+      tag: "button",
+      textContent: "удалить",
+      id: product.name,
+      className: "removeProductButton",
+    });
     removeProductButton.addEventListener("click", (event) =>
       this.removeProductFromCart(event)
     );
 
     productActionContainer.append(decrementProductButton, removeProductButton);
 
-    const li = createElement(
-      "li",
-      `${product.name} - ${product.price}р ${product.count} шт.`,
-      product.name
-    );
+    const li = createElement({
+      tag: "li",
+      textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
+      id: product.name,
+    });
     li.append(productActionContainer);
 
     const listOfProducts = document.querySelector("#listOfProducts");
