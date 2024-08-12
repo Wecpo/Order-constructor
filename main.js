@@ -10,8 +10,8 @@ Order.prototype.cart = [];
 Order.prototype.addProductToCart = function () {
   // Функция добавления продукта в корзину
 
-  const listOfProducts = document.querySelector("#listOfProducts");
-  listOfProducts.textContent = `Ваша корзина:`;
+  const isCartEmpty = document.querySelector("#isCartEmpty");
+  isCartEmpty.textContent = "Ваша корзина: ";
 
   const selectFormChoiceProduct = document.querySelector(
     "#selectFormChoiceProduct"
@@ -56,9 +56,8 @@ Order.prototype.removeProductFromCart = function (event) {
 
   this.cart = this.cart.filter((product) => product.name !== productName);
 
-  const listOfProducts = document.querySelector("#listOfProducts");
   if (!this.cart.length) {
-    listOfProducts.textContent = "Ваша корзина пуста";
+    isCartEmpty.textContent = "Ваша корзина пуста";
   }
 
   this.renderCart();
@@ -66,23 +65,13 @@ Order.prototype.removeProductFromCart = function (event) {
 
 Order.prototype.renderCart = function () {
   // Функция обновления корзины
-  const productsLi = document.querySelectorAll("li");
-
-  // Удаляем все элементы списка перед рендером
-  for (let i = 0; i < productsLi.length; i++) {
-    productsLi[i].firstElementChild.removeEventListener(
-      "click",
-      this.decrementProductInCart
-    );
-    productsLi[i].firstElementChild.removeEventListener(
-      "click",
-      this.removeProductFromCart
-    );
-
-    productsLi[i].remove();
-  }
 
   // Рендерим список продуктов
+  const islistOfProducts = document.querySelector("#listOfProducts");
+  islistOfProducts?.remove();
+
+  const liList = [];
+
   for (let product of this.cart) {
     const productActionContainer = createElement({ tag: "div" });
 
@@ -114,10 +103,18 @@ Order.prototype.renderCart = function () {
       id: product.name,
     });
     li.append(productActionContainer);
-
-    const listOfProducts = document.querySelector("#listOfProducts");
-    listOfProducts.append(li);
+    liList.push(li);
   }
+
+  const listOfProducts = createElement({
+    tag: "ol",
+    id: "listOfProducts",
+  });
+
+  listOfProducts.append(...liList);
+
+  const isCartEmpty = document.querySelector("#isCartEmpty");
+  isCartEmpty.after(listOfProducts);
 
   // Отображение общей стоимости
   const totalCartPrice = document.querySelector("#totalCartPrice");

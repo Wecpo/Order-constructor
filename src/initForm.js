@@ -81,10 +81,6 @@ export function initForm() {
   });
 
   // Создание списка продуктов
-  const listOfProducts = createElement({
-    tag: "ol",
-    id: "listOfProducts",
-  });
 
   // Компонент отображения пуста ли корзина
   const isCartEmpty = createElement({
@@ -108,7 +104,6 @@ export function initForm() {
     selectFormChoiceProduct,
     addProductToCartButton,
     isCartEmpty,
-    listOfProducts,
     totalCartPrice
   );
 }
