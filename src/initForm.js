@@ -1,6 +1,6 @@
 import Order from "../main.js";
 import { createElement } from "./utils/customCreateElement.js";
-import { debouce } from "./utils/debounce.js";
+import { debounce } from "./utils/debounce.js";
 
 const selectOptions = [
   {
@@ -48,17 +48,14 @@ export function initForm() {
     tag: "button",
     textContent: "Добавить в корзину",
   });
-  addProductToCartButton.addEventListener(
-    "click",
-    debouce(() => Order.prototype.addProductToCart(), 400)
-  );
+
+  const debouncedAddToCart = () =>
+    debounce(() => Order.prototype.addProductToCart(), 500);
+
+  addProductToCartButton.addEventListener("click", debouncedAddToCart());
   addProductToCartButton.addEventListener(
     "unload",
-    () =>
-      addProductToCartButton.removeEventListener(
-        "click",
-        debouce(Order.prototype.addProductToCart)
-      ),
+    addProductToCartButton.removeEventListener("click", debouncedAddToCart()),
     {
       once: true,
     }
