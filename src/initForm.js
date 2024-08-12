@@ -1,6 +1,4 @@
-import Order from "../main.js";
 import { createElement } from "./utils/customCreateElement.js";
-import { debounce } from "./utils/debounce.js";
 
 const selectOptions = [
   {
@@ -47,19 +45,8 @@ export function initForm() {
   const addProductToCartButton = createElement({
     tag: "button",
     textContent: "Добавить в корзину",
+    id: "addProductToCartButton",
   });
-
-  const debouncedAddToCart = () =>
-    debounce(() => Order.prototype.addProductToCart(), 500);
-
-  addProductToCartButton.addEventListener("click", debouncedAddToCart());
-  addProductToCartButton.addEventListener(
-    "unload",
-    addProductToCartButton.removeEventListener("click", debouncedAddToCart()),
-    {
-      once: true,
-    }
-  );
 
   // Создание формы выбора продукта
   const formChoiceProduct = createElement({ tag: "form" });
@@ -76,8 +63,6 @@ export function initForm() {
     textContent: "",
     id: "selectFormChoiceProduct",
   });
-
-  // Создание списка продуктов
 
   // Компонент отображения пуста ли корзина
   const isCartEmpty = createElement({
