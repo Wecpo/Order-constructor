@@ -83,10 +83,17 @@ export function initForm() {
   // Создание списка продуктов
   const listOfProducts = createElement({
     tag: "ol",
-    textContent: "Ваша корзина пуста",
     id: "listOfProducts",
   });
 
+  // Компонент отображения пуста ли корзина
+  const isCartEmpty = createElement({
+    tag: "span",
+    textContent: "Ваша корзина пуста",
+    id: "isCartEmpty",
+  });
+
+  // Компонент отображения общей стоимости корзины
   const totalCartPrice = createElement({
     tag: "div",
     textContent: "",
@@ -100,6 +107,7 @@ export function initForm() {
     labelForFormChoiceProduct,
     selectFormChoiceProduct,
     addProductToCartButton,
+    isCartEmpty,
     listOfProducts,
     totalCartPrice
   );
