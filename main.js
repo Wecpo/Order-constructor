@@ -40,8 +40,6 @@ export default class Order {
   addProductToCart() {
     // Функция добавления продукта в корзину
 
-    this.isCartEmpty.textContent = "Ваша корзина: ";
-
     const selectFormChoiceProduct = document.querySelector(
       "#selectFormChoiceProduct"
     );
@@ -50,7 +48,6 @@ export default class Order {
       selectFormChoiceProduct.value.split(" - ");
 
     const productIndex = this._getProductIndex(productName);
-
     if (productIndex >= 0) {
       this.cart[productIndex].count++;
     } else {
@@ -60,7 +57,7 @@ export default class Order {
         count: 1,
       });
     }
-
+    this.isCartEmpty.textContent = "Ваша корзина: ";
     this.renderCart();
   }
 
@@ -68,12 +65,17 @@ export default class Order {
     const productName = event.target.id;
 
     const product = this.cart.find((product) => product.name === productName);
+    if (!product) {
+      return console.error("Ошибка, такого продукта не существует!");
+    }
 
     if (product.count === 1) {
       this.removeProductFromCart();
     } else {
       const productIndex = this._getProductIndex(productName);
-
+      if (productIndex < 0) {
+        return console.error("Ошибка, такого продукта не существует!");
+      }
       this.cart[productIndex].count--;
     }
 
