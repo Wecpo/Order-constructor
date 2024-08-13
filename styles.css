@@ -14,16 +14,23 @@ label {
     align-items: center;
     margin-top: 25px;
     padding: 0;
+    counter-reset: num
 }
-
+ 
 li { 
-    width: 300px;
+    width: 350px;
     display: flex;
     justify-content: space-between; 
     align-items: center;
 }
 
+li:before {
+    content: counter(num) '.'; 
+	counter-increment: num;      
+    position: absolute;
+    left: 265px; 
+}
+
 button {
     margin: 5px;
-
 }
