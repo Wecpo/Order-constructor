@@ -28,7 +28,7 @@ li:before {
     content: counter(num) '.'; 
 	counter-increment: num;      
     position: absolute;
-    left: 265px; 
+    left: 445px; 
 }
 
 button {
