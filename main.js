@@ -37,9 +37,22 @@ export default class Order {
     return this.cart.findIndex((item) => item.name === productName);
   }
 
-  addProductToCart() {
-    // Функция добавления продукта в корзину
+  productInCartAction(action, productName) {
+    const productIndex = this._getProductIndex(productName);
+    console.log(productIndex);
 
+    if (action === "decrement") {
+      this.cart[productIndex].count--;
+    }
+
+    if (action === "increment") {
+      this.cart[productIndex].count++;
+    }
+
+    this.renderCart();
+  }
+
+  addProductToCart() {
     const selectFormChoiceProduct = document.querySelector(
       "#selectFormChoiceProduct"
     );
@@ -49,7 +62,7 @@ export default class Order {
 
     const productIndex = this._getProductIndex(productName);
     if (productIndex >= 0) {
-      this.cart[productIndex].count++;
+      this.productInCartAction("increment", productName);
     } else {
       this.cart.push({
         name: productName,
@@ -76,7 +89,7 @@ export default class Order {
       if (productIndex < 0) {
         return console.error("Ошибка, такого продукта не существует!");
       }
-      this.cart[productIndex].count--;
+      this.productInCartAction("decrement", productName);
     }
 
     this.renderCart();
@@ -116,9 +129,20 @@ export default class Order {
         this.decrementProductInCart(event)
       );
 
+      const incrementProductButton = createElement({
+        tag: "button",
+        textContent: "+",
+        id: product.name,
+        className: "incrementProductButton",
+      });
+
+      incrementProductButton.addEventListener("click", () =>
+        this.productInCartAction("increment", product.name)
+      );
+
       const removeProductButton = createElement({
         tag: "button",
-        textContent: "удалить",
+        textContent: "Удалить",
         id: product.name,
         className: "removeProductButton",
       });
@@ -128,12 +152,14 @@ export default class Order {
 
       productActionContainer.append(
         decrementProductButton,
+        `${product.count} шт.`,
+        incrementProductButton,
         removeProductButton
       );
 
       const li = createElement({
         tag: "li",
-        textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
+        textContent: `${product.name} - ${product.price}р  `,
         id: product.name,
       });
       li.append(productActionContainer);
