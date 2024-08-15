@@ -6,7 +6,7 @@ export default class Order {
   constructor() {
     initForm();
     this.cart = [];
-    this.isCartEmpty = document.querySelector("#isCartEmpty");
+    this.cartStatus = document.querySelector("#cartStatus");
 
     const debouncedAddToCart = () =>
       debounce(() => this.addProductToCart(), 250);
@@ -28,7 +28,6 @@ export default class Order {
   _getTotalPrice() {
     return this.cart.reduce((acc, item) => {
       const itemPrice = item.price * item.count;
-      console.log(item.price);
 
       return (acc += itemPrice);
     }, 0);
@@ -40,7 +39,6 @@ export default class Order {
 
   productInCartAction(action, productName) {
     const productIndex = this._getProductIndex(productName);
-    console.log(productIndex);
 
     if (action === "decrement") {
       this.cart[productIndex].count--;
@@ -71,7 +69,7 @@ export default class Order {
         count: 1,
       });
     }
-    this.isCartEmpty.textContent = "Ваша корзина: ";
+    this.cartStatus.textContent = "Ваша корзина: ";
     this.renderCart();
   }
 
@@ -102,16 +100,13 @@ export default class Order {
     this.cart = this.cart.filter((product) => product.name !== productName);
 
     if (!this.cart.length) {
-      this.isCartEmpty.textContent = "Ваша корзина пуста";
+      this.cartStatus.textContent = "Ваша корзина пуста";
     }
 
     this.renderCart();
   }
 
   renderCart() {
-    // Функция обновления корзины
-
-    // Рендерим список продуктов
     const islistOfProducts = document.querySelector("#listOfProducts");
     islistOfProducts?.remove();
 
@@ -174,9 +169,8 @@ export default class Order {
 
     listOfProducts.append(...liList);
 
-    this.isCartEmpty.after(listOfProducts);
+    this.cartStatus.after(listOfProducts);
 
-    // Отображение общей стоимости
     const totalCartPrice = document.querySelector("#totalCartPrice");
     if (this.cart.length) {
       totalCartPrice.textContent = `Общая стоимость: ${this._getTotalPrice()}р`;
