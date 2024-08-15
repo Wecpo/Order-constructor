@@ -2,28 +2,28 @@ import { createElement } from "./utils/customCreateElement.js";
 
 const selectOptions = [
   {
-    value: "Гречка - 100",
-    textContent: "Гречка - 100р",
+    name: "Гречка",
+    price: 100,
   },
   {
-    value: "Яблоки - 110",
-    textContent: "Яблоки - 110р",
+    name: "Яблоки",
+    price: 110,
   },
   {
-    value: "Сливочное масло - 200",
-    textContent: "Сливочное масло - 200р",
+    name: "Сливочное масло",
+    price: 200,
   },
   {
-    value: "Квас - 130",
-    textContent: "Квас - 100р",
+    name: "Квас",
+    price: 120,
   },
   {
-    value: "Колбаса - 400",
-    textContent: "Колбаса - 400р",
+    name: "Колбаса",
+    price: 400,
   },
   {
-    value: "Яйца - 140",
-    textContent: "Яйца - 140р",
+    name: "Яйца",
+    price: 140,
   },
 ];
 
