@@ -1,10 +1,8 @@
-import { initForm } from "./src/initForm.js";
 import { createElement } from "./src/utils/customCreateElement.js";
 import { debounce } from "./src/utils/debounce.js";
 
 export default class Order {
   constructor() {
-    initForm();
     this.cart = [];
     this.cartStatus = document.querySelector("#cartStatus");
 

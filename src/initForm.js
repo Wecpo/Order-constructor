@@ -44,48 +44,44 @@ function getSelectOptionsArray(selectOptions) {
   });
 }
 
-export function initForm() {
-  const body = document.querySelector("body");
+const body = document.querySelector("body");
 
-  const addProductToCartButton = createElement({
-    tag: "button",
-    textContent: "Добавить в корзину",
-    id: "addProductToCartButton",
-  });
+const addProductToCartButton = createElement({
+  tag: "button",
+  textContent: "Добавить в корзину",
+  id: "addProductToCartButton",
+});
 
-  const formChoiceProduct = createElement({ tag: "form" });
+const formChoiceProduct = createElement({ tag: "form" });
 
-  const labelForFormChoiceProduct = createElement({
-    tag: "label",
-    textContent: "Выберите продукт",
-  });
+const labelForFormChoiceProduct = createElement({
+  tag: "label",
+  textContent: "Выберите продукт",
+});
 
-  const selectFormChoiceProduct = createElement({
-    tag: "select",
-    textContent: "",
-    id: "selectFormChoiceProduct",
-  });
+const selectFormChoiceProduct = createElement({
+  tag: "select",
+  id: "selectFormChoiceProduct",
+});
 
-  const cartStatus = createElement({
-    tag: "span",
-    textContent: "Ваша корзина пуста",
-    id: "cartStatus",
-  });
+const cartStatus = createElement({
+  tag: "span",
+  textContent: "Ваша корзина пуста",
+  id: "cartStatus",
+});
 
-  const totalCartPrice = createElement({
-    tag: "div",
-    textContent: "",
-    id: "totalCartPrice",
-  });
+const totalCartPrice = createElement({
+  tag: "div",
+  id: "totalCartPrice",
+});
 
-  selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
+selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
 
-  body.append(
-    formChoiceProduct,
-    labelForFormChoiceProduct,
-    selectFormChoiceProduct,
-    addProductToCartButton,
-    cartStatus,
-    totalCartPrice
-  );
-}
+body.append(
+  formChoiceProduct,
+  labelForFormChoiceProduct,
+  selectFormChoiceProduct,
+  addProductToCartButton,
+  cartStatus,
+  totalCartPrice
+);
