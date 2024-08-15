@@ -6,17 +6,17 @@ export default class Order {
     this.cart = [];
     this.cartStatus = document.querySelector("#cartStatus");
 
-    const debouncedAddToCart = () =>
-      debounce(() => this.addProductToCart(), 250);
-
     const addProductToCartButton = document.querySelector(
       "#addProductToCartButton"
     );
 
-    addProductToCartButton.addEventListener("click", debouncedAddToCart());
+    const debouncedAddToCart = debounce(() => this.addProductToCart(), 400);
+
+    addProductToCartButton.addEventListener("click", debouncedAddToCart);
     addProductToCartButton.addEventListener(
       "unload",
-      addProductToCartButton.removeEventListener("click", debouncedAddToCart()),
+      () =>
+        addProductToCartButton.removeEventListener("click", debouncedAddToCart),
       {
         once: true,
       }
