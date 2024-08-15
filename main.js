@@ -27,7 +27,8 @@ export default class Order {
 
   _getTotalPrice() {
     return this.cart.reduce((acc, item) => {
-      const itemPrice = +item.price * item.count;
+      const itemPrice = item.price * item.count;
+      console.log(item.price);
 
       return (acc += itemPrice);
     }, 0);
@@ -159,7 +160,7 @@ export default class Order {
 
       const li = createElement({
         tag: "li",
-        textContent: `${product.name} - ${product.price}р  `,
+        textContent: `${product.name} - ${product.price}  `,
         id: product.name,
       });
       li.append(productActionContainer);
