@@ -1,4 +1,4 @@
-import { createElement } from "./src/utils/customCreateElement.js";
+import { CreateElement } from "./src/utils/сreateElement.js";
 import { debounce } from "./src/utils/debounce.js";
 
 export default class Order {
@@ -111,9 +111,9 @@ export default class Order {
     const liList = [];
 
     for (let product of this.cart) {
-      const productActionContainer = createElement({ tag: "div" });
+      const productActionContainer = new CreateElement({ tag: "div" });
 
-      const decrementProductButton = createElement({
+      const decrementProductButton = new CreateElement({
         tag: "button",
         textContent: "-",
         id: product.name,
@@ -123,7 +123,7 @@ export default class Order {
         this.decrementProductInCart(event)
       );
 
-      const incrementProductButton = createElement({
+      const incrementProductButton = new CreateElement({
         tag: "button",
         textContent: "+",
         id: product.name,
@@ -134,7 +134,7 @@ export default class Order {
         this.productInCartAction("increment", product.name)
       );
 
-      const removeProductButton = createElement({
+      const removeProductButton = new CreateElement({
         tag: "button",
         textContent: "Удалить",
         id: product.name,
@@ -151,7 +151,7 @@ export default class Order {
         removeProductButton
       );
 
-      const li = createElement({
+      const li = new CreateElement({
         tag: "li",
         textContent: `${product.name} - ${product.price}  `,
         id: product.name,
@@ -160,7 +160,7 @@ export default class Order {
       liList.push(li);
     }
 
-    const listOfProducts = createElement({
+    const listOfProducts = new CreateElement({
       tag: "ol",
       id: "listOfProducts",
     });

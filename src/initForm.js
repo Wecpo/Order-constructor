@@ -1,4 +1,4 @@
-import { createElement } from "./utils/customCreateElement.js";
+import { CreateElement } from "./utils/сreateElement.js";
 
 const selectOptions = [
   {
@@ -35,7 +35,7 @@ const selectOptions = [
 
 function getSelectOptionsArray(selectOptions) {
   return selectOptions.map((product) => {
-    const option = createElement({
+    const option = new CreateElement({
       tag: "option",
       textContent: `${product.name} - ${product.price}р`,
     });
@@ -46,31 +46,31 @@ function getSelectOptionsArray(selectOptions) {
 
 const body = document.querySelector("body");
 
-const addProductToCartButton = createElement({
+const addProductToCartButton = new CreateElement({
   tag: "button",
   textContent: "Добавить в корзину",
   id: "addProductToCartButton",
 });
 
-const formChoiceProduct = createElement({ tag: "form" });
+const formChoiceProduct = new CreateElement({ tag: "form" });
 
-const labelForFormChoiceProduct = createElement({
+const labelForFormChoiceProduct = new CreateElement({
   tag: "label",
   textContent: "Выберите продукт",
 });
 
-const selectFormChoiceProduct = createElement({
+const selectFormChoiceProduct = new CreateElement({
   tag: "select",
   id: "selectFormChoiceProduct",
 });
 
-const cartStatus = createElement({
+const cartStatus = new CreateElement({
   tag: "span",
   textContent: "Ваша корзина пуста",
   id: "cartStatus",
 });
 
-const totalCartPrice = createElement({
+const totalCartPrice = new CreateElement({
   tag: "div",
   id: "totalCartPrice",
 });
