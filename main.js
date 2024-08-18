@@ -1,10 +1,18 @@
 import { CreateElement } from "./src/utils/сreateElement.js";
 import { debounce } from "./src/utils/debounce.js";
 
+const PRODUCT_ACTIONS = {
+  add: "ADD",
+  increment: "INCREMENT",
+  decrement: "DECREMENT",
+  remove: "REMOVE",
+};
+
 export default class Order {
   constructor() {
     this.cart = [];
     this.cartStatus = document.querySelector("#cartStatus");
+    this.productsList = document.querySelector("#productsList");
 
     const addProductToCartButton = document.querySelector(
       "#addProductToCartButton"
@@ -23,6 +31,41 @@ export default class Order {
     );
   }
 
+  createLi(product) {
+    const li = new CreateElement({
+      tag: "li",
+      id: product.name,
+      textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
+    });
+    const removeButton = new CreateElement({
+      tag: "button",
+      textContent: "remove",
+    });
+    removeButton.addEventListener("click", () =>
+      this.rerenderCart(PRODUCT_ACTIONS.remove, product)
+    );
+
+    const incrementButton = new CreateElement({
+      tag: "button",
+      textContent: "incr",
+    });
+    incrementButton.addEventListener("click", () =>
+      this.rerenderCart(PRODUCT_ACTIONS.increment, product)
+    );
+
+    const decrementButton = new CreateElement({
+      tag: "button",
+      textContent: "decr",
+    });
+    decrementButton.addEventListener("click", () =>
+      this.rerenderCart(PRODUCT_ACTIONS.decrement, product)
+    );
+
+    li.append(incrementButton, decrementButton, removeButton);
+
+    return li;
+  }
+
   _getTotalPrice() {
     return this.cart.reduce((acc, item) => {
       const itemPrice = item.price * item.count;
@@ -32,21 +75,9 @@ export default class Order {
   }
 
   _getProductIndex(productName) {
-    return this.cart.findIndex((item) => item.name === productName);
-  }
-
-  productInCartAction(action, productName) {
-    const productIndex = this._getProductIndex(productName);
-
-    if (action === "decrement") {
-      this.cart[productIndex].count--;
-    }
-
-    if (action === "increment") {
-      this.cart[productIndex].count++;
-    }
-
-    this.renderCart();
+    return this.cart.findIndex((item) => {
+      return item.name === productName;
+    });
   }
 
   addProductToCart() {
@@ -58,118 +89,80 @@ export default class Order {
       selectFormChoiceProduct.value.split(" - ");
 
     const productIndex = this._getProductIndex(productName);
+    const newProduct = { name: productName, price: productPrice, count: 1 };
     if (productIndex >= 0) {
-      this.productInCartAction("increment", productName);
+      this.rerenderCart(PRODUCT_ACTIONS.increment, productName);
     } else {
-      this.cart.push({
-        name: productName,
-        price: productPrice,
-        count: 1,
+      this.cart.push(newProduct);
+
+      this.rerenderCart(PRODUCT_ACTIONS.add, {
+        ...newProduct,
       });
     }
+
     this.cartStatus.textContent = "Ваша корзина: ";
-    this.renderCart();
   }
 
-  decrementProductInCart() {
-    const productName = event.target.id;
+  decrementProduct(product) {
+    const index = this._getProductIndex(product.name);
+    this.cart[index].count--;
 
-    const product = this.cart.find((product) => product.name === productName);
-    if (!product) {
-      return console.error("Ошибка, такого продукта не существует!");
+    if (this.cart[index].count < 1) {
+      this.removeProduct(product);
     }
-
-    if (product.count === 1) {
-      this.removeProductFromCart();
-    } else {
-      const productIndex = this._getProductIndex(productName);
-      if (productIndex < 0) {
-        return console.error("Ошибка, такого продукта не существует!");
+    const products = document.querySelectorAll("li");
+    [...products].map((item) => {
+      if (item.id === product.name) {
+        item.replaceWith(this.createLi(this.cart[index]));
       }
-      this.productInCartAction("decrement", productName);
-    }
-
-    this.renderCart();
-  }
-
-  removeProductFromCart() {
-    const productName = event.target.id;
-
-    this.cart = this.cart.filter((product) => product.name !== productName);
-
-    if (!this.cart.length) {
-      this.cartStatus.textContent = "Ваша корзина пуста";
-    }
-
-    this.renderCart();
-  }
-
-  renderCart() {
-    const islistOfProducts = document.querySelector("#listOfProducts");
-    islistOfProducts?.remove();
-
-    const liList = [];
-
-    for (let product of this.cart) {
-      const productActionContainer = new CreateElement({ tag: "div" });
-
-      const decrementProductButton = new CreateElement({
-        tag: "button",
-        textContent: "-",
-        id: product.name,
-        className: "decrementProductButton",
-      });
-      decrementProductButton.addEventListener("click", (event) =>
-        this.decrementProductInCart(event)
-      );
-
-      const incrementProductButton = new CreateElement({
-        tag: "button",
-        textContent: "+",
-        id: product.name,
-        className: "incrementProductButton",
-      });
-
-      incrementProductButton.addEventListener("click", () =>
-        this.productInCartAction("increment", product.name)
-      );
-
-      const removeProductButton = new CreateElement({
-        tag: "button",
-        textContent: "Удалить",
-        id: product.name,
-        className: "removeProductButton",
-      });
-      removeProductButton.addEventListener("click", (event) =>
-        this.removeProductFromCart(event)
-      );
-
-      productActionContainer.append(
-        decrementProductButton,
-        `${product.count} шт.`,
-        incrementProductButton,
-        removeProductButton
-      );
-
-      const li = new CreateElement({
-        tag: "li",
-        textContent: `${product.name} - ${product.price}  `,
-        id: product.name,
-      });
-      li.append(productActionContainer);
-      liList.push(li);
-    }
-
-    const listOfProducts = new CreateElement({
-      tag: "ol",
-      id: "listOfProducts",
     });
+  }
 
-    listOfProducts.append(...liList);
+  incrementProduct(product) {
+    const index = this._getProductIndex(product);
+    this.cart[index].count++;
 
-    this.cartStatus.after(listOfProducts);
+    const products = document.querySelectorAll("li");
+    [...products].map((item) => {
+      if (item.id === product.name) {
+        item.replaceWith(this.createLi(this.cart[index]));
+      }
+    });
+  }
+
+  removeProduct(product) {
+    const products = document.querySelectorAll("li");
+    [...products].map((item) => {
+      if (item.id === product.name) {
+        item.remove();
+      }
+    });
+    this.cart = this.cart.filter((item) => !item.id === product.name);
+  }
+
+  addProduct(product) {
+    const li = this.createLi(product);
+    this.productsList.append(li);
+    this.cartStatus.after(this.productsList);
+  }
+
+  rerenderCart(action, product) {
+    if (action === PRODUCT_ACTIONS.add) {
+      this.addProduct(product);
+    }
+    if (action === PRODUCT_ACTIONS.remove) {
+      this.removeProduct();
+    }
+    if (action === PRODUCT_ACTIONS.increment) {
+      this.incrementProduct(product);
+    }
+
+    if (action === PRODUCT_ACTIONS.decrement) {
+      this.decrementProduct(product);
+    }
 
     const totalCartPrice = document.querySelector("#totalCartPrice");
+
     if (this.cart.length) {
       totalCartPrice.textContent = `Общая стоимость: ${this._getTotalPrice()}р`;
     } else {

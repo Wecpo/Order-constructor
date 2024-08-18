@@ -75,6 +75,8 @@ const totalCartPrice = new CreateElement({
   id: "totalCartPrice",
 });
 
+const productsList = new CreateElement({ tag: "ol", id: "productsList" });
+
 selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
 
 body.append(
@@ -83,5 +85,6 @@ body.append(
   selectFormChoiceProduct,
   addProductToCartButton,
   cartStatus,
+  productsList,
   totalCartPrice
 );
