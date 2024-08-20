@@ -19,7 +19,15 @@ export default class Order {
       "#addProductToCartButton"
     );
 
-    const debouncedAddToCart = debounce(() => this.addProduct(), 400);
+    const selectFormChoiceProduct = document.querySelector(
+      "#selectFormChoiceProduct"
+    );
+
+    const debouncedAddToCart = debounce(
+      () =>
+        this.rerenderCart(PRODUCT_ACTIONS.add, +selectFormChoiceProduct.value),
+      400
+    );
 
     addProductToCartButton.addEventListener("click", debouncedAddToCart);
     addProductToCartButton.addEventListener(
@@ -82,12 +90,7 @@ export default class Order {
     });
   }
 
-  addProduct() {
-    const selectFormChoiceProduct = document.querySelector(
-      "#selectFormChoiceProduct"
-    );
-
-    const optionId = +selectFormChoiceProduct.value;
+  addProduct(optionId) {
     const product = PRODUCTS.find((product) => product.id === optionId);
 
     const newProduct = {
@@ -99,12 +102,12 @@ export default class Order {
       this.rerenderCart(PRODUCT_ACTIONS.increment, newProduct.id);
       return;
     }
+
     this.cart.push(newProduct);
 
     const li = this.createLi(newProduct);
     this.productsList.append(li);
     this.cartStatus.after(this.productsList);
-
     this.cartStatus.textContent = "Ваша корзина: ";
   }
 
