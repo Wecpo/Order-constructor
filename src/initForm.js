@@ -1,6 +1,6 @@
 import { CreateElement } from "./utils/сreateElement.js";
 
-const selectOptions = [
+export const PRODUCTS = [
   {
     name: "Гречка",
     price: 100,
@@ -33,13 +33,14 @@ const selectOptions = [
   },
 ];
 
-function getSelectOptionsArray(selectOptions) {
-  return selectOptions.map((product) => {
+function getSelectOptionsArray(PRODUCTS) {
+  return PRODUCTS.map((product) => {
     const option = new CreateElement({
       tag: "option",
       textContent: `${product.name} - ${product.price}р`,
     });
-    option.value = `${product.name} - ${product.price}`;
+    option.value = product.id;
+
     return option;
   });
 }
@@ -77,7 +78,7 @@ const totalCartPrice = new CreateElement({
 
 const productsList = new CreateElement({ tag: "ol", id: "productsList" });
 
-selectFormChoiceProduct.append(...getSelectOptionsArray(selectOptions));
+selectFormChoiceProduct.append(...getSelectOptionsArray(PRODUCTS));
 
 body.append(
   formChoiceProduct,

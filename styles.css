@@ -23,13 +23,13 @@ li {
     justify-content: space-between; 
     align-items: center;
 }
-
+/* 
 li:before {
     content: counter(num) '.'; 
 	counter-increment: num;      
     position: relative;
     left: 30px; 
-}
+} */
 
 button {
     margin: 5px;
