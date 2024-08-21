@@ -13,23 +13,16 @@ label {
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
-    padding: 0;
-    counter-reset: num
+    padding: 0; 
 }
  
 li { 
-    width: 350px;
+    width: 500px;
     display: flex;
     justify-content: space-between; 
     align-items: center;
 }
-/* 
-li:before {
-    content: counter(num) '.'; 
-	counter-increment: num;      
-    position: relative;
-    left: 30px; 
-} */
+ 
 
 button {
     margin: 5px;

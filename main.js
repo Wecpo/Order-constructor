@@ -47,9 +47,11 @@ export default class Order {
       textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
     });
 
+    const buttonsContainer = new CreateElement({ tag: "div" });
+
     const removeButton = new CreateElement({
       tag: "button",
-      textContent: "remove",
+      textContent: "Удалить",
     });
     removeButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.remove, product.id)
@@ -57,7 +59,7 @@ export default class Order {
 
     const incrementButton = new CreateElement({
       tag: "button",
-      textContent: "incr",
+      textContent: "Увеличить",
     });
     incrementButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.increment, product.id)
@@ -65,13 +67,14 @@ export default class Order {
 
     const decrementButton = new CreateElement({
       tag: "button",
-      textContent: "decr",
+      textContent: "Уменьшить",
     });
     decrementButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
     );
+    buttonsContainer.append(incrementButton, decrementButton, removeButton);
 
-    li.append(incrementButton, decrementButton, removeButton);
+    li.append(buttonsContainer);
 
     return li;
   }
