@@ -15,8 +15,8 @@ export default class Order {
     this.cartStatus = document.querySelector("#cartStatus");
     this.productsList = document.querySelector("#productsList");
 
-    const addProductToCartButton = document.querySelector(
-      "#addProductToCartButton"
+    const toCartButton = document.querySelector(
+      "#toCartButton"
     );
 
     const selectFormChoiceProduct = document.querySelector(
@@ -29,11 +29,11 @@ export default class Order {
       400
     );
 
-    addProductToCartButton.addEventListener("click", debouncedAddToCart);
-    addProductToCartButton.addEventListener(
+    toCartButton.addEventListener("click", debouncedAddToCart);
+    toCartButton.addEventListener(
       "unload",
       () =>
-        addProductToCartButton.removeEventListener("click", debouncedAddToCart),
+        toCartButton.removeEventListener("click", debouncedAddToCart),
       {
         once: true,
       }
@@ -47,7 +47,7 @@ export default class Order {
       textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
     });
 
-    const buttonsContainer = new CreateElement({ tag: "div" });
+    const buttonContainer = new CreateElement({ tag: "div" });
 
     const removeButton = new CreateElement({
       tag: "button",
@@ -72,9 +72,9 @@ export default class Order {
     decrementButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
     );
-    buttonsContainer.append(incrementButton, decrementButton, removeButton);
+    buttonContainer.append(incrementButton, decrementButton, removeButton);
 
-    li.append(buttonsContainer);
+    li.append(buttonContainer);
 
     return li;
   }

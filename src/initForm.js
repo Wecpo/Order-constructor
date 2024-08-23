@@ -33,8 +33,8 @@ export const PRODUCTS = [
   },
 ];
 
-function getSelectOptionsArray(PRODUCTS) {
-  return PRODUCTS.map((product) => {
+function generateSelectOptions(products) {
+  return products.map((product) => {
     const option = new CreateElement({
       tag: "option",
       textContent: `${product.name} - ${product.price}р`,
@@ -47,10 +47,10 @@ function getSelectOptionsArray(PRODUCTS) {
 
 const body = document.querySelector("body");
 
-const addProductToCartButton = new CreateElement({
+const toCartButton = new CreateElement({
   tag: "button",
   textContent: "Добавить в корзину",
-  id: "addProductToCartButton",
+  id: "toCartButton",
 });
 
 const formChoiceProduct = new CreateElement({ tag: "form" });
@@ -78,13 +78,13 @@ const totalCartPrice = new CreateElement({
 
 const productsList = new CreateElement({ tag: "ol", id: "productsList" });
 
-selectFormChoiceProduct.append(...getSelectOptionsArray(PRODUCTS));
+selectFormChoiceProduct.append(...generateSelectOptions(PRODUCTS));
 
 body.append(
   formChoiceProduct,
   labelForFormChoiceProduct,
   selectFormChoiceProduct,
-  addProductToCartButton,
+  toCartButton,
   cartStatus,
   productsList,
   totalCartPrice
