@@ -14,10 +14,14 @@ export default class Order {
     this.cart = new Map();
     this.cartStatus = document.querySelector("#cartStatus");
     this.productList = document.querySelector("#productList");
+    this.actions = new Map([
+      [PRODUCT_ACTIONS.add, this.addProduct],
+      [PRODUCT_ACTIONS.decrement, this.decrementProduct],
+      [PRODUCT_ACTIONS.increment, this.incrementProduct],
+      [PRODUCT_ACTIONS.remove, this.removeProduct],
+    ]);
 
-    const toCartButton = document.querySelector(
-      "#toCartButton"
-    );
+    const toCartButton = document.querySelector("#toCartButton");
 
     const selectFormChoiceProduct = document.querySelector(
       "#selectFormChoiceProduct"
@@ -32,16 +36,15 @@ export default class Order {
     toCartButton.addEventListener("click", debouncedAddToCart);
     toCartButton.addEventListener(
       "unload",
-      () =>
-        toCartButton.removeEventListener("click", debouncedAddToCart),
+      () => toCartButton.removeEventListener("click", debouncedAddToCart),
       {
         once: true,
       }
     );
   }
 
-  createLi(product) { 
-        const li = new CreateElement({
+  createLi(product) {
+    const li = new CreateElement({
       tag: "li",
       id: product.id,
       textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
@@ -80,38 +83,39 @@ export default class Order {
   }
 
   getTotalPrice() {
-    return this.cart.reduce((acc, item) => {
+    return [...this.cart].reduce((acc, item) => {
       const itemPrice = item.price * item.count;
 
       return (acc += itemPrice);
     }, 0);
   }
 
-  addProduct(optionId) {
+  addProduct(optionId) { 
     const product = PRODUCTS.find((product) => product.id === optionId);
 
-    
     const newProduct = {
       ...product,
       count: 1,
-    };
-
-    if (this.cart.has( optionId)) {
+    };    
+    
+    if (this.cart.has(optionId)) {
       this.rerenderCart(PRODUCT_ACTIONS.increment, newProduct.id);
       return;
     }
 
-    this.cart.set(optionId, newProduct); 
+    this.cart.set(optionId, newProduct);
     const li = this.createLi(newProduct);
-    console.log(li);
-    
+
     this.productList.append(li);
     this.cartStatus.after(this.productList);
     this.cartStatus.textContent = "Ваша корзина: ";
   }
 
   decrementProduct(productId) {
-    this.cart.set(productId, {...this.cart.get(productId), count: this.cart.get(productId).count - 1})    
+    this.cart.set(productId, {
+      ...this.cart.get(productId),
+      count: this.cart.get(productId).count - 1,
+    });
 
     if (this.cart.get(productId).count < 1) {
       this.removeProduct(productId);
@@ -125,8 +129,12 @@ export default class Order {
     });
   }
 
-  incrementProduct(productId) { 
-    this.cart.set(productId, {...this.cart.get(productId), count: this.cart.get(productId).count + 1})   
+  incrementProduct(productId) {
+    this.cart.set(productId, {
+      ...this.cart.get(productId),
+      count: this.cart.get(productId).count + 1,
+    });
+
     const products = document.querySelectorAll("li");
     [...products].map((item) => {
       if (+item.id === productId) {
@@ -142,27 +150,15 @@ export default class Order {
         item.remove();
       }
     });
-     this.cart.delete(productId);
+    this.cart.delete(productId);
   }
 
-  rerenderCart(action, productId) {
-    if (action === PRODUCT_ACTIONS.add) {
-      this.addProduct(productId);
-    }
-    if (action === PRODUCT_ACTIONS.remove) {
-      this.removeProduct(productId);
-    }
-    if (action === PRODUCT_ACTIONS.increment) {
-      this.incrementProduct(productId);
-    }
-
-    if (action === PRODUCT_ACTIONS.decrement) {
-      this.decrementProduct(productId);
-    }
+  rerenderCart(action, productId) { 
+    this.actions.get(action).call(this, productId)  
 
     const totalCartPrice = document.querySelector("#totalCartPrice");
 
-    if (this.cart.length) {
+    if (this.cart.size) {
       totalCartPrice.textContent = `Общая стоимость: ${this.getTotalPrice()}р`;
     } else {
       this.cartStatus.textContent = "Ваша корзина пуста";
