@@ -11,9 +11,9 @@ const PRODUCT_ACTIONS = {
 
 export default class Order {
   constructor() {
-    this.cart = [];
+    this.cart = new Map();
     this.cartStatus = document.querySelector("#cartStatus");
-    this.productsList = document.querySelector("#productsList");
+    this.productList = document.querySelector("#productList");
 
     const toCartButton = document.querySelector(
       "#toCartButton"
@@ -40,8 +40,8 @@ export default class Order {
     );
   }
 
-  createLi(product) {
-    const li = new CreateElement({
+  createLi(product) { 
+        const li = new CreateElement({
       tag: "li",
       id: product.id,
       textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
@@ -87,57 +87,50 @@ export default class Order {
     }, 0);
   }
 
-  getProductIndex(productId) {
-    return this.cart.findIndex((item) => {
-      return item.id === productId;
-    });
-  }
-
   addProduct(optionId) {
     const product = PRODUCTS.find((product) => product.id === optionId);
 
+    
     const newProduct = {
       ...product,
       count: 1,
     };
 
-    if (this.cart.findIndex((product) => product.id === newProduct.id) > -1) {
+    if (this.cart.has( optionId)) {
       this.rerenderCart(PRODUCT_ACTIONS.increment, newProduct.id);
       return;
     }
 
-    this.cart.push(newProduct);
-
+    this.cart.set(optionId, newProduct); 
     const li = this.createLi(newProduct);
-    this.productsList.append(li);
-    this.cartStatus.after(this.productsList);
+    console.log(li);
+    
+    this.productList.append(li);
+    this.cartStatus.after(this.productList);
     this.cartStatus.textContent = "Ваша корзина: ";
   }
 
   decrementProduct(productId) {
-    const index = this.getProductIndex(productId);
-    this.cart[index].count--;
+    this.cart.set(productId, {...this.cart.get(productId), count: this.cart.get(productId).count - 1})    
 
-    if (this.cart[index].count < 1) {
+    if (this.cart.get(productId).count < 1) {
       this.removeProduct(productId);
     }
 
     const products = document.querySelectorAll("li");
     [...products].map((item) => {
       if (+item.id === productId) {
-        item.replaceWith(this.createLi(this.cart[index]));
+        item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
   }
 
-  incrementProduct(productId) {
-    const index = this.getProductIndex(productId);
-    this.cart[index].count++;
-
+  incrementProduct(productId) { 
+    this.cart.set(productId, {...this.cart.get(productId), count: this.cart.get(productId).count + 1})   
     const products = document.querySelectorAll("li");
     [...products].map((item) => {
       if (+item.id === productId) {
-        item.replaceWith(this.createLi(this.cart[index]));
+        item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
   }
@@ -149,7 +142,7 @@ export default class Order {
         item.remove();
       }
     });
-    this.cart = this.cart.filter((item) => !(item.id === productId));
+     this.cart.delete(productId);
   }
 
   rerenderCart(action, productId) {
