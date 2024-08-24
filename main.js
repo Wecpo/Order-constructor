@@ -84,20 +84,20 @@ export default class Order {
 
   getTotalPrice() {
     return [...this.cart].reduce((acc, item) => {
-      const itemPrice = item.price * item.count;
+      const itemPrice = item[1].price * item[1].count;
 
       return (acc += itemPrice);
     }, 0);
   }
 
-  addProduct(optionId) { 
+  addProduct(optionId) {
     const product = PRODUCTS.find((product) => product.id === optionId);
 
     const newProduct = {
       ...product,
       count: 1,
-    };    
-    
+    };
+
     if (this.cart.has(optionId)) {
       this.rerenderCart(PRODUCT_ACTIONS.increment, newProduct.id);
       return;
@@ -153,8 +153,8 @@ export default class Order {
     this.cart.delete(productId);
   }
 
-  rerenderCart(action, productId) { 
-    this.actions.get(action).call(this, productId)  
+  rerenderCart(action, productId) {
+    this.actions.get(action).call(this, productId);
 
     const totalCartPrice = document.querySelector("#totalCartPrice");
 
