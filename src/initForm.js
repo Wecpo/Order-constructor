@@ -4,32 +4,32 @@ export const PRODUCTS = [
   {
     name: "Гречка",
     price: 100,
-    id: 1,
+    id: `product-${crypto.randomUUID()}`,
   },
   {
     name: "Яблоки",
     price: 110,
-    id: 2,
+    id: `product-${crypto.randomUUID()}`,
   },
   {
     name: "Сливочное масло",
     price: 200,
-    id: 3,
+    id: `product-${crypto.randomUUID()}`,
   },
   {
     name: "Квас",
     price: 120,
-    id: 4,
+    id: `product-${crypto.randomUUID()}`,
   },
   {
     name: "Колбаса",
     price: 400,
-    id: 5,
+    id: `product-${crypto.randomUUID()}`,
   },
   {
     name: "Яйца",
     price: 140,
-    id: 6,
+    id: `product-${crypto.randomUUID()}`,
   },
 ];
 
@@ -39,7 +39,7 @@ function generateSelectOptions(products) {
       tag: "option",
       textContent: `${product.name} - ${product.price}р`,
     });
-    option.value = product.id;
+    option.id = product.id;
 
     return option;
   });

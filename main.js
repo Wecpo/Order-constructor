@@ -31,7 +31,8 @@ export default class Order {
       () =>
         this.rerenderCart(
           PRODUCT_ACTIONS.add,
-          Number(selectFormChoiceProduct.value)
+          selectFormChoiceProduct.options[selectFormChoiceProduct.selectedIndex]
+            .id
         ),
       400
     );
@@ -137,7 +138,7 @@ export default class Order {
 
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
-      if (Number(item.id) === productId) {
+      if (item.id === productId) {
         item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
@@ -151,7 +152,7 @@ export default class Order {
 
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
-      if (Number(item.id) === productId) {
+      if (item.id === productId) {
         item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
@@ -160,7 +161,7 @@ export default class Order {
   removeProduct(productId) {
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
-      if (Number(item.id) === productId) {
+      if (item.id === productId) {
         item.remove();
       }
     });
