@@ -29,7 +29,10 @@ export default class Order {
 
     const debouncedAddToCart = debounce(
       () =>
-        this.rerenderCart(PRODUCT_ACTIONS.add, +selectFormChoiceProduct.value),
+        this.rerenderCart(
+          PRODUCT_ACTIONS.add,
+          Number(selectFormChoiceProduct.value)
+        ),
       400
     );
 
@@ -93,15 +96,26 @@ export default class Order {
   addProduct(optionId) {
     const product = PRODUCTS.find((product) => product.id === optionId);
 
+    if (!product) {
+      const error = new CreateElement({
+        tag: "div",
+        className: "addProductError",
+        textContent: "Такого продукта не существует",
+      });
+
+      this.cartStatus.after(error);
+      return;
+    }
+
+    if (this.cart.has(optionId)) {
+      this.rerenderCart(PRODUCT_ACTIONS.increment, product.id);
+      return;
+    }
+
     const newProduct = {
       ...product,
       count: 1,
     };
-
-    if (this.cart.has(optionId)) {
-      this.rerenderCart(PRODUCT_ACTIONS.increment, newProduct.id);
-      return;
-    }
 
     this.cart.set(optionId, newProduct);
     const li = this.createLi(newProduct);
@@ -122,8 +136,8 @@ export default class Order {
     }
 
     const products = document.querySelectorAll("li");
-    [...products].map((item) => {
-      if (+item.id === productId) {
+    [...products].forEach((item) => {
+      if (Number(item.id) === productId) {
         item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
@@ -136,8 +150,8 @@ export default class Order {
     });
 
     const products = document.querySelectorAll("li");
-    [...products].map((item) => {
-      if (+item.id === productId) {
+    [...products].forEach((item) => {
+      if (Number(item.id) === productId) {
         item.replaceWith(this.createLi(this.cart.get(productId)));
       }
     });
@@ -145,8 +159,8 @@ export default class Order {
 
   removeProduct(productId) {
     const products = document.querySelectorAll("li");
-    [...products].map((item) => {
-      if (+item.id === productId) {
+    [...products].forEach((item) => {
+      if (Number(item.id) === productId) {
         item.remove();
       }
     });
@@ -160,10 +174,10 @@ export default class Order {
 
     if (this.cart.size) {
       totalCartPrice.textContent = `Общая стоимость: ${this.getTotalPrice()}р`;
-    } else {
-      this.cartStatus.textContent = "Ваша корзина пуста";
-      totalCartPrice.textContent = "";
+      return;
     }
+    this.cartStatus.textContent = "Ваша корзина пуста";
+    totalCartPrice.textContent = "";
   }
 }
 
