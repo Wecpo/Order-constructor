@@ -50,11 +50,14 @@ export default class Order {
   createLi(product) {
     const li = new CreateElement({
       tag: "li",
-      id: product.id,
-      textContent: `${product.name} - ${product.price}р ${product.count} шт.`,
+      id: product.id, 
+      className: 'productLi'
     });
 
+    const productName = new CreateElement({tag: 'span',textContent: `${product.name} - ${product.price}р`, className: "productName"})
+    const productCount = new CreateElement({tag: 'span', textContent: `${product.count} шт.`, className: 'productCount'})
     const buttonContainer = new CreateElement({ tag: "div" });
+    
 
     const removeButton = new CreateElement({
       tag: "button",
@@ -79,9 +82,10 @@ export default class Order {
     decrementButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
     );
-    buttonContainer.append(incrementButton, decrementButton, removeButton);
 
-    li.append(buttonContainer);
+    buttonContainer.append( incrementButton, productCount, decrementButton, removeButton);
+
+    li.append(productName, buttonContainer);
 
     return li;
   }
