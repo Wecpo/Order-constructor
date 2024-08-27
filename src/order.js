@@ -50,14 +50,22 @@ export default class Order {
   createLi(product) {
     const li = new CreateElement({
       tag: "li",
-      id: product.id, 
-      className: 'productLi'
+      id: product.id,
+      className: "productLi",
     });
 
-    const productName = new CreateElement({tag: 'span',textContent: `${product.name} - ${product.price}р`, className: "productName"})
-    const productCount = new CreateElement({tag: 'span', textContent: `${product.count} шт.`, className: 'productCount'})
+    const productName = new CreateElement({
+      tag: "span",
+      textContent: `${product.name} - ${product.price}р`,
+      className: "productName",
+    });
+
+    const productCount = new CreateElement({
+      tag: "span",
+      textContent: `${product.count} шт.`,
+      className: "productCount",
+    });
     const buttonContainer = new CreateElement({ tag: "div" });
-    
 
     const removeButton = new CreateElement({
       tag: "button",
@@ -69,7 +77,8 @@ export default class Order {
 
     const incrementButton = new CreateElement({
       tag: "button",
-      textContent: "Увеличить",
+      textContent: "+",
+      className: "incrementButton",
     });
     incrementButton.addEventListener("click", () =>
       this.rerenderCart(PRODUCT_ACTIONS.increment, product.id)
@@ -77,13 +86,25 @@ export default class Order {
 
     const decrementButton = new CreateElement({
       tag: "button",
-      textContent: "Уменьшить",
+      textContent: "-",
+      className: "decrementButton",
     });
-    decrementButton.addEventListener("click", () =>
-      this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
+
+    const decr = this.rerenderCart.bind(
+      this,
+      PRODUCT_ACTIONS.decrement,
+      product.id
     );
 
-    buttonContainer.append( incrementButton, productCount, decrementButton, removeButton);
+    // const decr = this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
+    decrementButton.addEventListener("click", decr);
+
+    buttonContainer.append(
+      incrementButton,
+      productCount,
+      decrementButton,
+      removeButton
+    );
 
     li.append(productName, buttonContainer);
 
@@ -143,7 +164,9 @@ export default class Order {
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
       if (item.id === productId) {
-        item.replaceWith(this.createLi(this.cart.get(productId)));
+        item.querySelector(".productCount").textContent = `${
+          this.cart.get(productId).count
+        } шт.`;
       }
     });
   }
@@ -157,7 +180,9 @@ export default class Order {
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
       if (item.id === productId) {
-        item.replaceWith(this.createLi(this.cart.get(productId)));
+        item.querySelector(".productCount").textContent = `${
+          this.cart.get(productId).count
+        } шт.`;
       }
     });
   }
