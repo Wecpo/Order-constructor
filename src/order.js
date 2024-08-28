@@ -116,7 +116,7 @@ export default class Order {
     );
 
     li.append(productInfo, buttonContainer);
-    
+
     return li;
   }
 
@@ -202,7 +202,7 @@ export default class Order {
       if (item.id === productId) {
         item
           .querySelector(".decrementButton")
-          .removeEventListener("click", this.decr);
+          .removeEventListener("click", this.debouncedDecrementProduct);
 
         item
           .querySelector(`.incrementButton`)
