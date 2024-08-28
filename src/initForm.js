@@ -45,8 +45,6 @@ function generateSelectOptions(products) {
   });
 }
 
-const body = document.querySelector("body");
-
 const toCartButton = new CreateElement({
   tag: "button",
   textContent: "Добавить в корзину",
@@ -60,9 +58,9 @@ const labelForFormChoiceProduct = new CreateElement({
   textContent: "Выберите продукт",
 });
 
-const selectFormChoiceProduct = new CreateElement({
+const productFormSelect = new CreateElement({
   tag: "select",
-  id: "selectFormChoiceProduct",
+  id: "productFormSelect",
 });
 
 const cartStatus = new CreateElement({
@@ -78,12 +76,13 @@ const totalCartPrice = new CreateElement({
 
 const productList = new CreateElement({ tag: "ol", id: "productList" });
 
-selectFormChoiceProduct.append(...generateSelectOptions(PRODUCTS));
+productFormSelect.append(...generateSelectOptions(PRODUCTS));
 
+const body = document.querySelector("body");
 body.append(
   formChoiceProduct,
   labelForFormChoiceProduct,
-  selectFormChoiceProduct,
+  productFormSelect,
   toCartButton,
   cartStatus,
   productList,

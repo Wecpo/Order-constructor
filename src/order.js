@@ -12,8 +12,7 @@ const PRODUCT_ACTIONS = {
 export default class Order {
   constructor() {
     this.cart = new Map();
-    this.cartStatus = document.querySelector("#cartStatus");
-    this.productList = document.querySelector("#productList");
+
     this.actions = new Map([
       [PRODUCT_ACTIONS.add, this.addProduct],
       [PRODUCT_ACTIONS.decrement, this.decrementProduct],
@@ -21,20 +20,20 @@ export default class Order {
       [PRODUCT_ACTIONS.remove, this.removeProduct],
     ]);
 
+    this.cartStatus = document.querySelector("#cartStatus");
+    this.productList = document.querySelector("#productList");
+
     const toCartButton = document.querySelector("#toCartButton");
 
-    const selectFormChoiceProduct = document.querySelector(
-      "#selectFormChoiceProduct"
-    );
+    const productFormSelect = document.querySelector("#productFormSelect");
 
     const debouncedAddToCart = debounce(
       () =>
         this.rerenderCart(
           PRODUCT_ACTIONS.add,
-          selectFormChoiceProduct.options[selectFormChoiceProduct.selectedIndex]
-            .id
+          productFormSelect.options[productFormSelect.selectedIndex].id
         ),
-      400
+      200
     );
 
     toCartButton.addEventListener("click", debouncedAddToCart);
@@ -54,10 +53,10 @@ export default class Order {
       className: "productLi",
     });
 
-    const productName = new CreateElement({
+    const productInfo = new CreateElement({
       tag: "span",
       textContent: `${product.name} - ${product.price}р`,
-      className: "productName",
+      className: "productInfo",
     });
 
     const productCount = new CreateElement({
@@ -65,24 +64,31 @@ export default class Order {
       textContent: `${product.count} шт.`,
       className: "productCount",
     });
-    const buttonContainer = new CreateElement({ tag: "div" });
 
     const removeButton = new CreateElement({
       tag: "button",
       textContent: "Удалить",
+      className: "removeButton",
     });
-    removeButton.addEventListener("click", () =>
-      this.rerenderCart(PRODUCT_ACTIONS.remove, product.id)
+
+    this.debouncedRemoveProduct = debounce(
+      () => this.rerenderCart(PRODUCT_ACTIONS.remove, product.id),
+      200
     );
+
+    removeButton.addEventListener("click", this.debouncedRemoveProduct);
 
     const incrementButton = new CreateElement({
       tag: "button",
       textContent: "+",
       className: "incrementButton",
     });
-    incrementButton.addEventListener("click", () =>
-      this.rerenderCart(PRODUCT_ACTIONS.increment, product.id)
+
+    this.debouncedIncrementProduct = debounce(
+      () => this.rerenderCart(PRODUCT_ACTIONS.increment, product.id),
+      200
     );
+    incrementButton.addEventListener("click", this.debouncedIncrementProduct);
 
     const decrementButton = new CreateElement({
       tag: "button",
@@ -90,14 +96,17 @@ export default class Order {
       className: "decrementButton",
     });
 
-    const decr = this.rerenderCart.bind(
-      this,
-      PRODUCT_ACTIONS.decrement,
-      product.id
+    this.debouncedDecrementProduct = debounce(
+      () => this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id),
+      200
     );
 
-    // const decr = this.rerenderCart(PRODUCT_ACTIONS.decrement, product.id)
-    decrementButton.addEventListener("click", decr);
+    decrementButton.addEventListener("click", this.debouncedDecrementProduct);
+
+    const buttonContainer = new CreateElement({
+      tag: "div",
+      className: "productButtonContainer",
+    });
 
     buttonContainer.append(
       incrementButton,
@@ -106,8 +115,8 @@ export default class Order {
       removeButton
     );
 
-    li.append(productName, buttonContainer);
-
+    li.append(productInfo, buttonContainer);
+    
     return li;
   }
 
@@ -191,6 +200,18 @@ export default class Order {
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
       if (item.id === productId) {
+        item
+          .querySelector(".decrementButton")
+          .removeEventListener("click", this.decr);
+
+        item
+          .querySelector(`.incrementButton`)
+          .removeEventListener("click", this.debouncedIncrementProduct);
+
+        item
+          .querySelector(`.removeButton`)
+          .removeEventListener("click", this.debouncedRemoveProduct);
+
         item.remove();
       }
     });
