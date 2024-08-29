@@ -161,10 +161,7 @@ export default class Order {
   }
 
   decrementProduct(productId) {
-    this.cart.set(productId, {
-      ...this.cart.get(productId),
-      count: this.cart.get(productId).count - 1,
-    });
+    this.cart.get(productId).count--
 
     if (this.cart.get(productId).count < 1) {
       this.removeProduct(productId);
@@ -180,11 +177,8 @@ export default class Order {
     });
   }
 
-  incrementProduct(productId) {
-    this.cart.set(productId, {
-      ...this.cart.get(productId),
-      count: this.cart.get(productId).count + 1,
-    });
+  incrementProduct(productId) { 
+    this.cart.get(productId).count++
 
     const products = document.querySelectorAll("li");
     [...products].forEach((item) => {
