@@ -121,7 +121,7 @@ export default class Order {
   }
 
   getTotalPrice() {
-    return [...this.cart].reduce((acc, item) => {
+    return Array.from(this.cart).reduce((acc, item) => {
       const itemPrice = item[1].price * item[1].count;
 
       return (acc += itemPrice);
@@ -168,7 +168,7 @@ export default class Order {
     }
 
     const products = document.querySelectorAll("li");
-    [...products].forEach((item) => {
+    products.forEach((item) => {
       if (item.id === productId) {
         item.querySelector(".productCount").textContent = `${
           this.cart.get(productId).count
@@ -181,7 +181,7 @@ export default class Order {
     this.cart.get(productId).count++
 
     const products = document.querySelectorAll("li");
-    [...products].forEach((item) => {
+    products.forEach((item) => {
       if (item.id === productId) {
         item.querySelector(".productCount").textContent = `${
           this.cart.get(productId).count
@@ -192,7 +192,7 @@ export default class Order {
 
   removeProduct(productId) {
     const products = document.querySelectorAll("li");
-    [...products].forEach((item) => {
+    products.forEach((item) => {
       if (item.id === productId) {
         item
           .querySelector(".decrementButton")
