@@ -167,7 +167,7 @@ export default class Order {
       this.removeProduct(productId);
     }
 
-    const products = document.querySelectorAll("li");
+    const products = document.querySelectorAll(".productLi");
     products.forEach((item) => {
       if (item.id === productId) {
         item.querySelector(".productCount").textContent = `${
@@ -180,7 +180,7 @@ export default class Order {
   incrementProduct(productId) { 
     this.cart.get(productId).count++
 
-    const products = document.querySelectorAll("li");
+    const products = document.querySelectorAll(".productLi");
     products.forEach((item) => {
       if (item.id === productId) {
         item.querySelector(".productCount").textContent = `${
@@ -191,7 +191,7 @@ export default class Order {
   }
 
   removeProduct(productId) {
-    const products = document.querySelectorAll("li");
+    const products = document.querySelectorAll(".productLi");
     products.forEach((item) => {
       if (item.id === productId) {
         item
